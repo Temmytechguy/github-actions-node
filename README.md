@@ -1,1 +1,1 @@
-Deploy node.js to Heroku using github action workflow
+Deploy node.js app to Heroku using github action workflow
