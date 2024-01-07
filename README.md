@@ -1,1 +1,2 @@
-Deploy node.js app to Heroku using github action workflow
+CI/CD Pipeline using Github Actions 
+ - Deploy Node.JS project on Heroku
