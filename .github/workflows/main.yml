@@ -1,7 +1,9 @@
 name: NodeJS Github Action
 
 on:
-  push
+  push:
+    branches:
+      - dev-team
 
 jobs:
   build:
@@ -21,6 +23,25 @@ jobs:
 
       - name: Run test
         run: npm test
+
+      - name: Notify Slack Action
+       uses: ravsamhq/notify-slack-action@2.3.0
+       if: always()
+       with: 
+         status: ${{ job.status }}
+         notify_when: 'failure'
+         notification_title: '{workflow} has {status_message}'
+         message_format: '{emoji} *{workflow} {status_message} in <{repo_url}|{repo}>'
+         footer: 'Linked to Repo <{repo_url}|{repo}>'
+         notify_when: 'failure'
+         mention_users: 'dev'
+         mention_users_when: 'failure, warnings'
+         mention_groups: 'dev'
+         mention_groups_when: 'failure,warmings'
+
+       env:
+          SLACK_WEBHOOH_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
+    
 
   deploy:
     runs-on: ubuntu-latest
