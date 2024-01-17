@@ -1,60 +1,78 @@
-name: NodeJS Github Action
+Certainly! Here's the formatted YAML for your GitHub Actions workflow:
 
-on:
-  push:
-    branches:
-      - dev_team
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v3
-
-      - name: Use Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run test
-        run: npm test
-
-      - name: Get user Info
-        run: echo "${{ toJson(github) }}"
-
-      - name: Notify Slack Action
-        uses: ravsamhq/notify-slack-action@2.3.0
-        if: always()
-        with: 
-          status: ${{ job.status }}
-          notify_when: 'success,failure,warnings'
-          notification_title: '{workflow} has {status_message} on {branch_url} with commit id: {commit_sha}'
-          message_format: '{emoji}  ${{ github.event.head_commit.author.name }} | ${{ github.event.head_commit.message }} *{workflow}*  {status_message} in <{repo_url} | {repo}>'
-          footer: 'Linked Repo <{repo_url}|{repo}> | <{workflow_url}| view workflow>'
-          mention_users: 'U064LEGNC8M'
-          mention_users_when: 'success,failure, warnings'
-          mention_groups: 'U064LEGNC8M, !channel'
-          mention_groups_when: 'success'
-
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v3
-
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.13.15
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "github-actions-node" # Must be unique in Heroku ss
-          heroku_email: "temmy.tech01@outlook.com"
+  ```yaml
+  name: NodeJS Github Action
+  
+  on:
+    push:
+      branches:
+        - dev_team
+        - main
+  
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout the repo
+          uses: actions/checkout@v3
+  
+        - name: Use Node
+          uses: actions/setup-node@v3
+          with:
+            node-version: 16
+  
+        - name: Install dependencies
+          run: npm install
+  
+        - name: Run test
+          run: npm test
+  
+        - name: Get user Info
+          run: echo "${{ toJson(github) }}"
+  
+        - name: Notify Slack Action on Build
+          uses: ravsamhq/notify-slack-action@2.3.0
+          if: always()
+          with: 
+            status: ${{ job.status }}
+            notify_when: 'success,failure,warnings'
+            notification_title: '{workflow} has {status_message} on {branch_url} with commit id: {commit_sha}'
+            message_format: '{emoji}  ${{ github.event.head_commit.author.name }} | ${{ github.event.head_commit.message }} *{workflow}*  {status_message} in <{repo_url} | {repo}>'
+            footer: 'Linked Repo <{repo_url}|{repo}> | <{workflow_url}| view workflow>'
+            mention_users: 'U064LEGNC8M'
+            mention_users_when: 'success,failure, warnings'
+            mention_groups: 'U064LEGNC8M, !channel'
+            mention_groups_when: 'success'
+  
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
+  
+    deploy:
+      runs-on: ubuntu-latest
+      needs: [build]
+      steps:
+        - name: Checkout the repo
+          uses: actions/checkout@v3
+  
+        - name: Deploy to Heroku
+          uses: akhileshns/heroku-deploy@v3.13.15
+          with:
+            heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+            heroku_app_name: "github-actions-node" # Must be unique in Heroku ss
+            heroku_email: "temmy.tech01@outlook.com"
+  
+        - name: Notify Slack Action On Deploy
+          uses: ravsamhq/notify-slack-action@2.3.0
+          if: always()
+          with: 
+            status: ${{ job.status }}
+            notify_when: 'success,failure,warnings'
+            notification_title: '{workflow} has {status_message} on {branch_url} with commit id: {commit_sha}'
+            message_format: '{emoji}  ${{ github.event.head_commit.author.name }} | ${{ github.event.head_commit.message }} *{workflow}*  {status_message} in <{repo_url} | {repo}>'
+            footer: 'Linked Repo <{repo_url}|{repo}> | <{workflow_url}| view workflow>'
+            mention_users: 'U064LEGNC8M'
+            mention_users_when: 'success,failure, warnings'
+            mention_groups: 'U064LEGNC8M, !channel'
+            mention_groups_when: 'failure,success'
+  
