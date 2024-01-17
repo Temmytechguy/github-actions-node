@@ -29,12 +29,12 @@ jobs:
         if: always()
         with: 
           status: ${{ job.status }}
-          notify_when: 'failure'
+          notify_when: 'success,failure,warnings'
           notification_title: '{workflow} has {status_message}'
-          message_format: '{emoji} *{workflow} {status_message} in <{repo_url}|{repo}>'
+          message_format: '{emoji} *{workflow}*  {status_message} in <{repo_url} | {repo}>'
           footer: 'Linked to Repo <{repo_url}|{repo}>'
-          mention_users: 'dev'
-          mention_users_when: 'failure, warnings'
+          mention_users: 'temmy.tech01'
+          mention_users_when: 'success,failure, warnings'
           mention_groups: 'dev'
           mention_groups_when: 'failure,warnings'
 
