@@ -1,6 +1,4 @@
-Certainly! Here's the formatted YAML for your GitHub Actions workflow:
 
-  ```yaml
   name: NodeJS Github Action
   
   on:
