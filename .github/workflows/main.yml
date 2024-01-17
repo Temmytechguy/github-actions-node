@@ -3,7 +3,7 @@ name: NodeJS Github Action
 on:
   push:
     branches:
-      - dev-team
+      - dev_team
 
 jobs:
   build:
